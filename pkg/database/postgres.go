@@ -3,7 +3,7 @@ package database
 import (
 	"database/sql"
 	"github.com/ednailson/miner/internal/infra/datastore"
-	"github.com/ednailson/miner/internal/infra/datastore/postegres"
+	"github.com/ednailson/miner/internal/infra/datastore/postgres"
 	"github.com/jmoiron/sqlx"
 	"os"
 )
@@ -21,5 +21,5 @@ func Setup() (datastore.DataStore, error) {
 		return nil, err
 	}
 
-	return postegres.NewRequestDataStore(dbx), nil
+	return postgres.NewRequestDataStore(dbx), nil
 }
