@@ -23,7 +23,7 @@ func (u *useCaseMiner) Save(req entity.Request) interface{} {
 		result = true
 	case entity.SubscribeMethod:
 		switch params := req.Params.(type) {
-		case []string:
+		case []interface{}:
 			if len(params) != 1 || params[0] != minerVersion {
 				return entity.NewFail(&req.ID, entity.ErrorInvalidParams())
 			}
