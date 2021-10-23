@@ -34,8 +34,7 @@ func (s *Server) Start() error {
 	for {
 		conn, err := s.listener.Accept()
 		if err != nil {
-			zap.S().Errorf("server: failed to accept a connection, error: %s", err.Error())
-			continue
+			return err
 		}
 
 		zap.S().Info("server: new connection accepted")
@@ -93,6 +92,8 @@ func (s *Server) Close() {
 
 func sendResponse(conn net.Conn, resp interface{}) {
 	body, _ := json.Marshal(resp)
+
+	zap.S().Infof("body %s", string(body))
 
 	_, err := conn.Write(body)
 	if err != nil {

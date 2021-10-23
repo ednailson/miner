@@ -19,7 +19,7 @@ func main() {
 		for {
 			l, _, err := reader.ReadLine()
 			if err != nil {
-				log.Println(fmt.Sprintf("error: %s"), err.Error())
+				log.Println(fmt.Sprintf("error: %s", err.Error()))
 			}
 
 			log.Println(string(l))

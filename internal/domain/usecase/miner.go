@@ -36,7 +36,7 @@ func (u *useCaseMiner) Save(req entity.Request) interface{} {
 		}
 		id, err := u.ds.Subscription()
 		if err != nil {
-			zap.S().Error("usecase: subscription error: %s", err.Error())
+			zap.S().Errorf("usecase: subscription error: %s", err.Error())
 			return entity.NewFail(&req.ID, entity.ErrorServer())
 		}
 		result = entity.NewSubscription(id)
@@ -46,7 +46,7 @@ func (u *useCaseMiner) Save(req entity.Request) interface{} {
 
 	err := u.ds.Save(req)
 	if err != nil {
-		zap.S().Error("usecase: failed to save on datastore, error: %s", err.Error())
+		zap.S().Errorf("usecase: failed to save on datastore, error: %s", err.Error())
 		return entity.NewFail(&req.ID, entity.ErrorServer())
 	}
 
