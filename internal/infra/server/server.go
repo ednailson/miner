@@ -7,6 +7,7 @@ import (
 	"github.com/ednailson/miner/internal/domain/entity"
 	"github.com/ednailson/miner/internal/domain/usecase"
 	"go.uber.org/zap"
+	"io"
 	"net"
 )
 
@@ -28,7 +29,7 @@ func (s *Server) Start() error {
 		return err
 	}
 
-	zap.S().Info("server has been started")
+	zap.S().Info("server: it has been started")
 
 	for {
 		conn, err := s.listener.Accept()
@@ -45,6 +46,10 @@ func (s *Server) Start() error {
 			for {
 				line, _, err := reader.ReadLine()
 				if err != nil {
+					if err == io.EOF {
+						zap.S().Info("server: a connection was lost")
+						return
+					}
 					zap.S().Errorf("server: failed to read line, error: %s", err.Error())
 					continue
 				}

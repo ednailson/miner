@@ -3,6 +3,7 @@ package usecase
 import (
 	"github.com/ednailson/miner/internal/domain/entity"
 	"github.com/ednailson/miner/internal/infra/datastore"
+	"go.uber.org/zap"
 )
 
 type useCaseMiner struct {
@@ -26,6 +27,7 @@ func (u *useCaseMiner) Save(req entity.Request) interface{} {
 
 	err := u.ds.Save(req)
 	if err != nil {
+		zap.S().Error("usecase: failed to save on datastore, error: %s", err.Error())
 		return entity.NewFail(&req.ID, entity.ErrorServer())
 	}
 

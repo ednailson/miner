@@ -23,7 +23,7 @@ services:
       dockerfile: Dockerfile
     container_name: stratum
     ports:
-      - "13666:13666"
+      - "4000:4000"
     env_file:
       - .env
     restart: on-failure

@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
-const tableName = "requests"
+const tableName = "public.requests"
 
 type requestsDataStore struct {
 	db *sqlx.DB
