@@ -98,4 +98,8 @@ func sendResponse(conn net.Conn, resp interface{}) {
 	if err != nil {
 		zap.S().Errorf("server: failed to write response, error: %s", err.Error())
 	}
+	_, err = conn.Write([]byte("\n"))
+	if err != nil {
+		zap.S().Errorf("server: failed to write final line on response, error: %s", err.Error())
+	}
 }
