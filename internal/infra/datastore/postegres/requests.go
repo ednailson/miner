@@ -1,6 +1,7 @@
 package postegres
 
 import (
+	"encoding/json"
 	"github.com/ednailson/miner/internal/domain/entity"
 	"github.com/huandu/go-sqlbuilder"
 	"github.com/jmoiron/sqlx"
@@ -18,21 +19,23 @@ func NewRequestDataStore(db *sqlx.DB) *requestsDataStore {
 }
 
 func (r *requestsDataStore) Save(req entity.Request) error {
+	data, err := json.Marshal(req)
+	if err != nil {
+		return err
+	}
 	query, args := sqlbuilder.
 		InsertInto(tableName).
 		Cols(
-			"method",
-			"params",
+			"data",
 			"id",
 		).
 		Values(
-			req.Method,
-			req.Params,
+			data,
 			req.ID,
 		).
 		BuildWithFlavor(sqlbuilder.PostgreSQL)
 
-	_, err := r.db.Exec(query, args...)
+	_, err = r.db.Exec(query, args...)
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,6 @@
-CREATE TABLE public.requests (
+--- change / add / modify this schema as necessary
+CREATE TABLE public.sample_table (
     id bigint NOT NULL,
-    method varchar(255),
-    params jsonb,
-    created_at timestamp without time zone DEFAULT now() NOT NULL
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    data jsonb
 );
