@@ -6,6 +6,8 @@ import (
 	"go.uber.org/zap"
 )
 
+const minerVersion = "cgminer/4.10.0"
+
 type useCaseMiner struct {
 	ds datastore.DataStore
 }
@@ -19,8 +21,22 @@ func (u *useCaseMiner) Save(req entity.Request) interface{} {
 	switch req.Method {
 	case entity.AuthorizeMethod:
 		result = true
-	case entity.SubscriptionMethod:
-		result = entity.Subscription{}
+	case entity.SubscribeMethod:
+		if params, ok := req.Params.([]interface{}); ok {
+			if len(params) != 1 || params[0] != minerVersion {
+				return entity.NewFail(&req.ID, entity.ErrorInvalidParams())
+			}
+		} else if params, ok := req.Params.(map[string]interface{}); ok {
+			if value, ok := params["version"]; !ok || value != minerVersion {
+				return entity.NewFail(&req.ID, entity.ErrorInvalidParams())
+			}
+		}
+		id, err := u.ds.Subscription()
+		if err != nil {
+			zap.S().Error("usecase: subscription error: %s", err.Error())
+			return entity.NewFail(&req.ID, entity.ErrorServer())
+		}
+		result = entity.NewSubscription(id)
 	default:
 		return entity.NewFail(&req.ID, entity.ErrorMethodNotFound())
 	}

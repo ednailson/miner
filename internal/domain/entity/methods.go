@@ -1,9 +1,9 @@
 package entity
 
 const (
-	JsonrpcVersion     = "2.0"
-	AuthorizeMethod    = "mining.authorize"
-	SubscriptionMethod = "mining.subscription"
+	JsonrpcVersion  = "2.0"
+	AuthorizeMethod = "mining.authorize"
+	SubscribeMethod = "mining.subscribe"
 )
 
 type Success struct {
