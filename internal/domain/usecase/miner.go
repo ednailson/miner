@@ -28,7 +28,7 @@ func (u *useCaseMiner) Save(req entity.Request) interface{} {
 				return entity.NewFail(&req.ID, entity.ErrorInvalidParams())
 			}
 		case map[string]interface{}:
-			if value, ok := params["version"]; !ok || value != minerVersion {
+			if params["version"] != minerVersion {
 				return entity.NewFail(&req.ID, entity.ErrorInvalidParams())
 			}
 		default:
