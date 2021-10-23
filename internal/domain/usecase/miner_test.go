@@ -23,7 +23,7 @@ func TestMiner(t *testing.T) {
 	})
 	t.Run("subscribe successfully", func(t *testing.T) {
 		ds := new(mocks.DataStore)
-		request := entity.FakeRequest(entity.SubscribeMethod, []string{minerVersion})
+		request := entity.FakeRequest(entity.SubscribeMethod, map[string]interface{}{"version": minerVersion})
 		id := int64(6489)
 		ds.On("Subscription").Return(id, nil)
 		ds.On("Save", request).Return(nil)
@@ -54,7 +54,7 @@ func TestMiner(t *testing.T) {
 	})
 	t.Run("error on subscription method in datastore", func(t *testing.T) {
 		ds := new(mocks.DataStore)
-		request := entity.FakeRequest(entity.SubscribeMethod, []string{minerVersion})
+		request := entity.FakeRequest(entity.SubscribeMethod, map[string]interface{}{"version": minerVersion})
 		ds.On("Subscription").Return(int64(0), fmt.Errorf(""))
 		sut := NewMiner(ds)
 
