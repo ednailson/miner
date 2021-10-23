@@ -29,11 +29,9 @@ func (r *requestsDataStore) Save(req entity.Request) error {
 		InsertInto(requestsTableName).
 		Cols(
 			"data",
-			"id",
 		).
 		Values(
 			data,
-			req.ID,
 		).
 		BuildWithFlavor(sqlbuilder.PostgreSQL)
 

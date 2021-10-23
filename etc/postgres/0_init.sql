@@ -1,6 +1,5 @@
 --- change / add / modify this schema as necessary
 CREATE TABLE public.requests (
-    id bigint NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     data jsonb
 );
