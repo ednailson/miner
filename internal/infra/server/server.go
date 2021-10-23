@@ -40,46 +40,48 @@ func (s *Server) Start() error {
 
 		zap.S().Info("server: new connection accepted")
 
-		go func(conn net.Conn) {
-			reader := bufio.NewReader(conn)
+		go s.handleConn(conn)
+	}
+}
 
-			for {
-				line, _, err := reader.ReadLine()
-				if err != nil {
-					if err == io.EOF {
-						zap.S().Info("server: a connection was lost")
-						return
-					}
-					zap.S().Errorf("server: failed to read line, error: %s", err.Error())
-					continue
-				}
+func (s *Server) handleConn(conn net.Conn) {
+	reader := bufio.NewReader(conn)
 
-				var req entity.Request
-
-				err = json.Unmarshal(line, &req)
-				if err != nil {
-					sendResponse(
-						conn,
-						entity.NewFail(nil, entity.ErrorParse()),
-					)
-					continue
-				}
-
-				err = req.Validate()
-				if err != nil {
-					sendResponse(
-						conn,
-						entity.NewFail(nil, entity.ErrorInvalidRequest()),
-					)
-					continue
-				}
-
-				sendResponse(
-					conn,
-					s.uc.Save(req),
-				)
+	for {
+		line, _, err := reader.ReadLine()
+		if err != nil {
+			if err == io.EOF {
+				zap.S().Info("server: a connection was lost")
+				return
 			}
-		}(conn)
+			zap.S().Errorf("server: failed to read line, error: %s", err.Error())
+			continue
+		}
+
+		var req entity.Request
+
+		err = json.Unmarshal(line, &req)
+		if err != nil {
+			sendResponse(
+				conn,
+				entity.NewFail(nil, entity.ErrorParse()),
+			)
+			continue
+		}
+
+		err = req.Validate()
+		if err != nil {
+			sendResponse(
+				conn,
+				entity.NewFail(nil, entity.ErrorInvalidRequest()),
+			)
+			continue
+		}
+
+		sendResponse(
+			conn,
+			s.uc.Save(req),
+		)
 	}
 }
 
