@@ -17,12 +17,10 @@ func (r *Request) Validate() error {
 	if err := v.Struct(r); err != nil {
 		return fmt.Errorf("invalid request")
 	}
-	if r.Params != nil {
-		_, isSlice := r.Params.([]interface{})
-		_, isMap := r.Params.(map[string]interface{})
-		if !isSlice && !isMap {
-			return fmt.Errorf("invalid request")
-		}
+	switch r.Params.(type) {
+	case []interface{}, map[string]interface{}:
+		return nil
+	default:
+		return fmt.Errorf("invalid request")
 	}
-	return nil
 }

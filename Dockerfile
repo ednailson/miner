@@ -1,5 +1,5 @@
 # Prepare
-FROM golang:1.17.0-buster AS prepare
+FROM golang:1.16.0-buster AS prepare
 WORKDIR /source
 COPY go.mod .
 COPY go.sum .
